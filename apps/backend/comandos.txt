@@ -1,0 +1,15 @@
+Correr back:
+
+pnpm start:dev
+
+
+
+Generar cliente y validar:
+
+pnpm dlx prisma validate
+pnpm dlx prisma generate
+
+
+Subir a la base de datos con push:
+
+pnpm dlx prisma db push

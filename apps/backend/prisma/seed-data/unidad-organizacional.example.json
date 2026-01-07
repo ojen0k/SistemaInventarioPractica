@@ -1,0 +1,30 @@
+[
+    {
+        "area": "ADMINISTRACION",
+        "direccion": "DIRECCION DE FINANZAS",
+        "departamento": "DEPARTAMENTO DE CONTABILIDAD",
+        "oficina": "OFICINA DE TESORERIA",
+        "seccion_programa": "PROGRAMA DE CONTROL INTERNO"
+    },
+    {
+        "area": "ADMINISTRACION",
+        "direccion": "DIRECCION DE FINANZAS",
+        "departamento": "DEPARTAMENTO DE CONTABILIDAD",
+        "oficina": "OFICINA DE TESORERIA",
+        "seccion_programa": "SECCION DE PAGOS"
+    },
+    {
+        "area": "SERVICIOS",
+        "direccion": "DIRECCION DE OPERACIONES",
+        "departamento": "DEPARTAMENTO DE MANTENCION",
+        "oficina": "OFICINA DE TERRENO",
+        "seccion_programa": "CUADRILLA ELECTRICA"
+    },
+    {
+        "area": "SERVICIOS",
+        "direccion": "DIRECCION DE OPERACIONES",
+        "departamento": "DEPARTAMENTO DE MANTENCION",
+        "oficina": "OFICINA DE TERRENO",
+        "seccion_programa": "CUADRILLA AGUAS"
+    }
+]

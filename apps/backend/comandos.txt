@@ -28,3 +28,37 @@ orden de comandos:
 3.- pnpm dlx prisma db push
 4.- pnpm dlx prisma generate
 
+
+
+Querys en SQL Server:
+
+Para ver las areas y subareas:
+
+-- 1) Conteos
+SELECT COUNT(*) AS areas FROM dbo.area;
+SELECT COUNT(*) AS direcciones FROM dbo.direccion;
+SELECT COUNT(*) AS departamentos FROM dbo.departamento;
+SELECT COUNT(*) AS oficinas FROM dbo.oficina;
+SELECT COUNT(*) AS secciones_programas FROM dbo.seccion_programa;
+
+-- 2) Ver algunos datos
+SELECT TOP 20 * FROM dbo.area ORDER BY id_area;
+SELECT TOP 20 * FROM dbo.direccion ORDER BY id_direccion;
+SELECT TOP 20 * FROM dbo.departamento ORDER BY id_departamento;
+SELECT TOP 20 * FROM dbo.oficina ORDER BY id_oficina;
+SELECT TOP 20 * FROM dbo.seccion_programa ORDER BY id_seccion_programa;
+
+-- 3) Ver la jerarquía completa (join)
+SELECT TOP 200
+  a.nombre AS area,
+  d.nombre AS direccion,
+  dep.nombre AS departamento,
+  o.nombre AS oficina,
+  sp.nombre AS seccion_programa
+FROM dbo.seccion_programa sp
+JOIN dbo.oficina o            ON o.id_oficina = sp.id_oficina
+JOIN dbo.departamento dep     ON dep.id_departamento = o.id_departamento
+JOIN dbo.direccion d          ON d.id_direccion = dep.id_direccion
+JOIN dbo.area a               ON a.id_area = d.id_area
+ORDER BY a.nombre, d.nombre, dep.nombre, o.nombre, sp.nombre;
+

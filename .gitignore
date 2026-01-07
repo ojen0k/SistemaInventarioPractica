@@ -17,3 +17,9 @@ pnpm-debug.log*
 Thumbs.db
 .idea/
 .vscode/
+
+# Prisma
+prisma/seed-data/unidad-organizacional.json
+
+# Seed data real (NO subir al repo público)
+apps/backend/prisma/seed-data/unidad-organizacional.json

@@ -120,7 +120,7 @@ ________________________________________
 ``` usuario ```
 
 ``` usuario_rol ```
-id_usuario =
+id_usuario = su id
 id_rol = 1 (administrador) ó 2 (soporte)
 
 1 usuario puede tener muchos roles

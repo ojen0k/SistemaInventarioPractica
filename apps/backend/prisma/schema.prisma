@@ -5,3 +5,451 @@ generator client {
 datasource db {
   provider = "sqlserver"
 }
+
+//
+// 1) Estructura organizacional
+//
+
+model area {
+  id_area Int     @id @default(autoincrement())
+  nombre  String  @unique @db.NVarChar(150)
+  activo  Boolean @default(true)
+
+  direcciones direccion[]
+
+  @@map("area")
+}
+
+model direccion {
+  id_direccion Int     @id @default(autoincrement())
+  id_area      Int
+  nombre       String  @db.NVarChar(150)
+  activo       Boolean @default(true)
+
+  area          area           @relation(fields: [id_area], references: [id_area])
+  departamentos departamento[]
+
+  @@unique([id_area, nombre])
+  @@map("direccion")
+}
+
+model departamento {
+  id_departamento Int     @id @default(autoincrement())
+  id_direccion    Int
+  nombre          String  @db.NVarChar(150)
+  activo          Boolean @default(true)
+
+  direccion direccion @relation(fields: [id_direccion], references: [id_direccion])
+  oficinas  oficina[]
+
+  @@unique([id_direccion, nombre])
+  @@map("departamento")
+}
+
+model oficina {
+  id_oficina      Int     @id @default(autoincrement())
+  id_departamento Int
+  nombre          String  @db.NVarChar(150)
+  activo          Boolean @default(true)
+
+  departamento       departamento       @relation(fields: [id_departamento], references: [id_departamento])
+  secciones_programa seccion_programa[]
+
+  @@unique([id_departamento, nombre])
+  @@map("oficina")
+}
+
+model seccion_programa {
+  id_seccion_programa Int     @id @default(autoincrement())
+  id_oficina          Int
+  nombre              String  @db.NVarChar(150)
+  activo              Boolean @default(true)
+
+  oficina oficina @relation(fields: [id_oficina], references: [id_oficina])
+
+  asignaciones asignacion_activo[]
+  prestamos    prestamo[]
+
+  @@unique([id_oficina, nombre])
+  @@map("seccion_programa")
+}
+
+//
+// 2) Catálogos (valores fijos)
+//
+
+model cat_tipo_adquisicion {
+  id_tipo_adquisicion Int     @id @default(autoincrement())
+  nombre              String  @unique @db.NVarChar(120)
+  activo              Boolean @default(true)
+
+  compras compra[]
+
+  @@map("cat_tipo_adquisicion")
+}
+
+model cat_modalidad {
+  id_modalidad Int     @id @default(autoincrement())
+  nombre       String  @unique @db.NVarChar(120)
+  activo       Boolean @default(true)
+
+  compras compra[]
+
+  @@map("cat_modalidad")
+}
+
+model cat_unidad_gestora {
+  id_unidad_gestora Int     @id @default(autoincrement())
+  nombre            String  @unique @db.NVarChar(150)
+  activo            Boolean @default(true)
+
+  compras compra[]
+
+  @@map("cat_unidad_gestora")
+}
+
+model cat_clasificacion_activo {
+  id_clasificacion_activo Int     @id @default(autoincrement())
+  nombre                  String  @unique @db.NVarChar(150)
+  activo                  Boolean @default(true)
+
+  activos activo[]
+
+  @@map("cat_clasificacion_activo")
+}
+
+model cat_estado_activo {
+  id_estado_activo Int     @id @default(autoincrement())
+  nombre           String  @unique @db.NVarChar(80)
+  activo           Boolean @default(true)
+
+  activos activo[]
+
+  @@map("cat_estado_activo")
+}
+
+model cat_cargo {
+  id_cargo Int     @id @default(autoincrement())
+  nombre   String  @unique @db.NVarChar(150)
+  activo   Boolean @default(true)
+
+  asignaciones asignacion_activo[]
+  prestamos    prestamo[]
+
+  @@map("cat_cargo")
+}
+
+model cat_tipo_interfaz {
+  id_tipo_interfaz Int     @id @default(autoincrement())
+  nombre           String  @unique @db.NVarChar(80)
+  activo           Boolean @default(true)
+
+  interfaces_red interfaz_red[]
+
+  @@map("cat_tipo_interfaz")
+}
+
+model cat_estado_ip {
+  id_estado_ip Int     @id @default(autoincrement())
+  nombre       String  @unique @db.NVarChar(80)
+  activo       Boolean @default(true)
+
+  ips ip_recurso[]
+
+  @@map("cat_estado_ip")
+}
+
+model cat_tipo_usabilidad {
+  id_tipo_usabilidad Int     @id @default(autoincrement())
+  nombre             String  @unique @db.NVarChar(80)
+  activo             Boolean @default(true)
+
+  asignaciones asignacion_activo[]
+
+  @@map("cat_tipo_usabilidad")
+}
+
+model cat_tipo_asignacion {
+  id_tipo_asignacion Int     @id @default(autoincrement())
+  nombre             String  @unique @db.NVarChar(80)
+  activo             Boolean @default(true)
+
+  asignaciones asignacion_activo[]
+
+  @@map("cat_tipo_asignacion")
+}
+
+//
+// 3) Compras y proveedores
+//
+
+model proveedor {
+  id_proveedor     Int     @id @default(autoincrement())
+  rut_proveedor    String  @unique @db.NVarChar(20)
+  nombre_proveedor String  @db.NVarChar(200)
+  activo           Boolean @default(true)
+
+  compras compra[]
+
+  @@map("proveedor")
+}
+
+model compra {
+  id_compra Int @id @default(autoincrement())
+
+  orden_compra   String? @db.NVarChar(80)
+  numero_factura String? @db.NVarChar(80)
+  anio           Int?
+  numero_item    Int?
+
+  id_tipo_adquisicion Int?
+  id_modalidad        Int?
+  id_unidad_gestora   Int?
+  id_proveedor        Int?
+
+  observaciones String?  @db.NVarChar(500)
+  creado_en     DateTime @default(now()) @db.DateTime2
+
+  tipo_adquisicion cat_tipo_adquisicion? @relation(fields: [id_tipo_adquisicion], references: [id_tipo_adquisicion])
+  modalidad        cat_modalidad?        @relation(fields: [id_modalidad], references: [id_modalidad])
+  unidad_gestora   cat_unidad_gestora?   @relation(fields: [id_unidad_gestora], references: [id_unidad_gestora])
+  proveedor        proveedor?            @relation(fields: [id_proveedor], references: [id_proveedor])
+
+  activos activo[]
+
+  @@map("compra")
+}
+
+//
+// 4) Inventario unificado
+//
+
+model tipo_activo {
+  id_tipo_activo Int     @id @default(autoincrement())
+  nombre         String  @unique @db.NVarChar(120)
+  descripcion    String? @db.NVarChar(300)
+  activo         Boolean @default(true)
+
+  activos activo[]
+
+  @@map("tipo_activo")
+}
+
+model activo {
+  id_activo      Int  @id @default(autoincrement())
+  id_tipo_activo Int
+  id_compra      Int?
+
+  // comunes
+  producto           String? @db.NVarChar(200)
+  descripcion        String? @db.NVarChar(500)
+  marca              String? @db.NVarChar(120)
+  modelo             String? @db.NVarChar(120)
+  numero_serie       String? @db.NVarChar(120)
+  codigo_activo_fijo String? @db.NVarChar(120)
+
+  id_inventario String? @db.NVarChar(120)
+  id_adaptador  String? @db.NVarChar(120)
+  codigo_hh     String? @db.NVarChar(120)
+
+  id_clasificacion_activo Int?
+  dimension               String? @db.NVarChar(120)
+
+  // estado
+  id_estado_activo    Int
+  observacion         String?   @db.NVarChar(800)
+  fecha_actualizacion DateTime? @db.DateTime2
+
+  // híbrido para guardar datos adicionales en formato JSON
+  detalles_json String?
+
+  // auditoría para mantener un registro de cambios
+  creado_en      DateTime @default(now()) @db.DateTime2
+  actualizado_en DateTime @updatedAt @db.DateTime2
+
+  tipo_activo          tipo_activo               @relation(fields: [id_tipo_activo], references: [id_tipo_activo])
+  compra               compra?                   @relation(fields: [id_compra], references: [id_compra])
+  clasificacion_activo cat_clasificacion_activo? @relation(fields: [id_clasificacion_activo], references: [id_clasificacion_activo])
+  estado_activo        cat_estado_activo         @relation(fields: [id_estado_activo], references: [id_estado_activo])
+
+  asignaciones   asignacion_activo[]
+  prestamos      prestamo[]
+  interfaces_red interfaz_red[]
+
+  @@map("activo")
+}
+
+//
+// 5) Asignación del activo
+//
+
+model asignacion_activo {
+  id_asignacion_activo Int @id @default(autoincrement())
+
+  id_activo           Int
+  id_seccion_programa Int?
+  ubicacion_interna   String? @db.NVarChar(200)
+
+  rut_responsable      String? @db.NVarChar(20)
+  nombre_responsable   String? @db.NVarChar(200)
+  id_cargo_responsable Int?
+
+  id_tipo_usabilidad Int?
+  id_tipo_asignacion Int?
+
+  fecha_instalacion DateTime? @db.DateTime2
+  fecha_asignacion  DateTime? @db.DateTime2
+  fecha_termino     DateTime? @db.DateTime2
+
+  observaciones String? @db.NVarChar(800)
+
+  activo           activo               @relation(fields: [id_activo], references: [id_activo])
+  seccion_programa seccion_programa?    @relation(fields: [id_seccion_programa], references: [id_seccion_programa])
+  cargo            cat_cargo?           @relation(fields: [id_cargo_responsable], references: [id_cargo])
+  tipo_usabilidad  cat_tipo_usabilidad? @relation(fields: [id_tipo_usabilidad], references: [id_tipo_usabilidad])
+  tipo_asignacion  cat_tipo_asignacion? @relation(fields: [id_tipo_asignacion], references: [id_tipo_asignacion])
+
+  @@index([id_activo])
+  @@index([id_seccion_programa])
+  @@map("asignacion_activo")
+}
+
+//
+// 6) Préstamos
+//
+
+model prestamo {
+  id_prestamo Int @id @default(autoincrement())
+
+  id_activo           Int
+  id_seccion_programa Int?
+  ubicacion_interna   String? @db.NVarChar(200)
+
+  rut_responsable      String? @db.NVarChar(20)
+  nombre_responsable   String? @db.NVarChar(200)
+  id_cargo_responsable Int?
+
+  fecha_desde      DateTime  @db.DateTime2
+  fecha_hasta      DateTime? @db.DateTime2
+  fecha_entrega    DateTime? @db.DateTime2
+  fecha_devolucion DateTime? @db.DateTime2
+
+  observacion String? @db.NVarChar(800)
+  estado      String? @db.NVarChar(120)
+
+  activo           activo            @relation(fields: [id_activo], references: [id_activo])
+  seccion_programa seccion_programa? @relation(fields: [id_seccion_programa], references: [id_seccion_programa])
+  cargo            cat_cargo?        @relation(fields: [id_cargo_responsable], references: [id_cargo])
+
+  @@index([id_activo])
+  @@index([id_seccion_programa])
+  @@map("prestamo")
+}
+
+//
+// 7) Red/IP
+//
+
+model interfaz_red {
+  id_interfaz_red Int @id @default(autoincrement())
+
+  id_activo        Int
+  id_tipo_interfaz Int?
+
+  host         String? @db.NVarChar(120)
+  mac_ethernet String? @db.NVarChar(50)
+  mac_wireless String? @db.NVarChar(50)
+
+  observaciones String? @db.NVarChar(500)
+
+  activo        activo             @relation(fields: [id_activo], references: [id_activo])
+  tipo_interfaz cat_tipo_interfaz? @relation(fields: [id_tipo_interfaz], references: [id_tipo_interfaz])
+
+  interfaz_ip interfaz_ip?
+
+  @@index([id_activo])
+  @@map("interfaz_red")
+}
+
+model ip_recurso {
+  id_ip_recurso Int @id @default(autoincrement())
+
+  ip           String @unique @db.NVarChar(50)
+  id_estado_ip Int
+
+  perfil_acceso String? @db.NVarChar(120)
+  proposito     String? @db.NVarChar(200)
+  aplicacion    String? @db.NVarChar(200)
+  encontrado    String? @db.NVarChar(200)
+
+  usuario String? @db.NVarChar(200)
+  unidad  String? @db.NVarChar(200)
+
+  observaciones String? @db.NVarChar(500)
+
+  estado_ip cat_estado_ip @relation(fields: [id_estado_ip], references: [id_estado_ip])
+
+  interfaz_ip interfaz_ip?
+
+  @@map("ip_recurso")
+}
+
+model interfaz_ip {
+  id_interfaz_ip Int @id @default(autoincrement())
+
+  id_interfaz_red Int @unique
+  id_ip_recurso   Int @unique
+
+  fecha_asignacion DateTime? @db.DateTime2
+  observaciones    String?   @db.NVarChar(500)
+
+  interfaz_red interfaz_red @relation(fields: [id_interfaz_red], references: [id_interfaz_red])
+  ip_recurso   ip_recurso   @relation(fields: [id_ip_recurso], references: [id_ip_recurso])
+
+  @@map("interfaz_ip")
+}
+
+//
+// 8) Usuarios / roles
+//
+
+model rol {
+  id_rol Int     @id @default(autoincrement())
+  nombre String  @unique @db.NVarChar(80)
+  activo Boolean @default(true)
+
+  usuarios usuario_rol[]
+
+  @@map("rol")
+}
+
+model usuario {
+  id_usuario Int @id @default(autoincrement())
+
+  nombre_usuario  String  @unique @db.NVarChar(120)
+  correo          String? @unique @db.NVarChar(200)
+  hash_contrasena String  @db.NVarChar(300)
+
+  activo        Boolean   @default(true)
+  ultimo_acceso DateTime? @db.DateTime2
+
+  creado_en      DateTime @default(now()) @db.DateTime2
+  actualizado_en DateTime @updatedAt @db.DateTime2
+
+  roles usuario_rol[]
+
+  @@map("usuario")
+}
+
+model usuario_rol {
+  id_usuario_rol Int @id @default(autoincrement())
+
+  id_usuario Int
+  id_rol     Int
+
+  usuario usuario @relation(fields: [id_usuario], references: [id_usuario])
+  rol     rol     @relation(fields: [id_rol], references: [id_rol])
+
+  @@unique([id_usuario, id_rol])
+  @@map("usuario_rol")
+}

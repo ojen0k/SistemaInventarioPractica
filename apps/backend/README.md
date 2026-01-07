@@ -1,98 +1,128 @@
 <p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
+  Definición de las tablas de la base de datos
 </p>
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+# 1) Estructura organizacional
+``` area ``` Municipal / Salud / Educación
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+``` direccion ``` 1 Dirección : N Departamentos
 
-## Description
+``` departamento ``` 1 Departamento : N Oficinas
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+``` oficina ``` 1 Oficina : N Secciones Programa
 
-## Project setup
+``` seccion_programa ``` 1 Sección Programa : N Activos (Sección/Programa es el final de las sub-áreas). En asingación y préstamo se guardará el id de la sección/programa.
 
-```bash
-$ pnpm install
-```
 
-## Compile and run the project
+________________________________________
+# 2) Catálogos (por editar a futuro; esta en base al excel)
 
-```bash
-# development
-$ pnpm run start
+``` cat_tipo_adquisicion ```: por definir
+- compra agil
+- convenio marco
+- enviado por tecero
+- licitacion
+- trato directo
+- ...
 
-# watch mode
-$ pnpm run start:dev
+``` cat_modalidad ```: por definir
+- arriendo
+- compra
+- ...
 
-# production mode
-$ pnpm run start:prod
-```
+``` cat_unidad_gestora ```: Se refiere al área? por definir
+- Municipal
+- Salud
+- Educación
+- ...
 
-## Run tests
+``` cat_clasificacion_activo ```: por definir los activos más importantes
+- computadores
+- impresoras
+- ...
 
-```bash
-# unit tests
-$ pnpm run test
+``` cat_estado_activo ```: por definir
+- En servicio
+- Disponible
+- ...
 
-# e2e tests
-$ pnpm run test:e2e
+``` cat_cargo ```: por definir, cargo de la persona que lo usa
+- Abogado
+- Administrativo
+- ...
 
-# test coverage
-$ pnpm run test:cov
-```
+``` cat_tipo_interfaz ```: por definir
+- Ethernet
+- Wifi
+- ...
 
-## Deployment
+``` cat_estado_ip ```: por definir
+- Asignado
+- Disponible
+- ...
 
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
+``` cat_tipo_usabilidad ```: por definir
+- Para prestamo
+- cctv
+- ...
 
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+``` cat_tipo_asignacion ```: por definir
+- Asignacion
+- Asignado
+- Prestamos
+- Permanente
+- Reasignacion
+- ...
+________________________________________
+# 3) Compras y proveedores
 
-```bash
-$ pnpm install -g @nestjs/mau
-$ mau deploy
-```
+``` proveedor ```
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+``` compra ```
 
-## Resources
+Cada compra tiene a lo más 1 proveedor (puede ser nullable) y un proveedor puede aparecer en muchas compras.
+(Corroborar que por cada registro de compra hay un solo proveedor)
+________________________________________
+# 4) Inventario unificado (periféricos + TIC HW + equipos ETX)
+``` tipo_activo ``` (Computador, Notebook, Monitor, Impresora, Periférico, etc.)
 
-Check out a few resources that may come in handy when working with NestJS:
+``` activo ``` (Tabla principal de inventario)
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+________________________________________
+# 5) Asignación del activo
+``` asignacion_activo ```
 
-## Support
+Historial de “dónde está / quién lo usa” (no préstamo)
+________________________________________
+# 6) Préstamos
+``` prestamo ```
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+Registro de préstamo con fechas/hora y su responsable
+________________________________________
+# 7) Red/IP
+``` interfaz_red ```
+Información técnica del equipo y su interfaz
 
-## Stay in touch
+``` ip_recurso ```
+Pool de IPs (asignado/disponible)
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+``` interfaz_ip ```
+(Asignación “actual” sin historial)
+1 interfaz solo puede tener 1 ip actual
+1 ip solo puede estar en 1 interfaz a la vez
 
-## License
+________________________________________
+# 8) Acceso al sistema (usuarios y roles)
+``` rol ```
+- Administrador (1)
+- Soporte (2)
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+``` usuario ```
+
+``` usuario_rol ```
+id_usuario =
+id_rol = 1 (administrador) ó 2 (soporte)
+
+1 usuario puede tener muchos roles
+1 rol puede tener muchos usuarios
+

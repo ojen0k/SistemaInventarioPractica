@@ -11,7 +11,7 @@ export default defineConfig({
   schema: "prisma/schema.prisma",
   migrations: {
     path: "prisma/migrations",
-    seed: "pnpm exec tsx prisma/seed.ts",
+    seed: "pnpm exec tsx prisma/scripts/seedRunner.ts",
   },
   datasource: {
     url: process.env["DATABASE_URL"],

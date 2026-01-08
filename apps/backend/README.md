@@ -11,7 +11,7 @@
 
 ``` oficina ``` 1 Oficina : N Secciones Programa
 
-``` seccion_programa ``` 1 Sección Programa : N Activos (Sección/Programa es el final de las sub-áreas). En asingación y préstamo se guardará el id de la sección/programa.
+``` seccion_programa ``` 1 Sección Programa : N Activos (Sección/Programa es el final de las sub-áreas). En asignación y préstamo se guardará el id de la sección/programa.
 
 
 ________________________________________

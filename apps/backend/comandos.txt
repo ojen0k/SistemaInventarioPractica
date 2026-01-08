@@ -30,6 +30,16 @@ orden de comandos:
 
 
 
+Para agregar areas y estados de los catalogos (llamados cat_*nombre* dentro de la BD), se usan los comandos:
+
+pnpm seed:areas (agrega areas y subareas)
+pnpm seed:catalogos (agrega estados de los catalogos) 
+
+cada seed tiene su .json y readme para las instrucciones de como usarlo y agregar datos
+
+
+
+
 Querys en SQL Server:
 
 Para ver las areas y subareas:

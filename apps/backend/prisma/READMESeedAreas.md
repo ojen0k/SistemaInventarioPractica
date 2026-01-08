@@ -8,11 +8,11 @@ Este seed carga los **catálogos de unidad organizacional** en SQL Server:
 - Se puede ejecutar varias veces (por ejemplo, cuando agregas nuevas oficinas)(upsert).
 
 ## Ubicación sugerida en el repo
- `apps/backend/prisma/`:
+ `apps/backend/prisma/scripts/seedCatalogos.ts`:
 
 ```
-apps/backend/prisma/
-  seed.ts
+apps/backend/prisma/scripts/
+  seedAreas.ts
   seed-data/
     unidad-organizacional.json
   README.md
@@ -78,7 +78,7 @@ En `seed.ts` hay un bloque **CONFIG** para ajustar si se usan otros nombres en l
 4. Ejecutar el seed:
 
 ```bash
-npm run db:seed
+pnpm seed:areas
 ```
 
 ## Recomendación: constraints únicos

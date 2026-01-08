@@ -13,6 +13,7 @@ import { PrismaMssql } from "@prisma/adapter-mssql";
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import "dotenv/config";
 
 type UORow = {
   area: string;
@@ -78,7 +79,7 @@ const adapter = adapterFromDatabaseUrl();
 const prisma = new PrismaClient({ adapter });
 
 
-// ====== CONFIG (ajustar si se usa otros nombres, leer READMEdeSeed.md) ======
+// ====== CONFIG (ajustar si se usa otros nombres, leer READMESeedAreas.md) ======
 const DB_SCHEMA = "dbo";
 
 // Tablas
@@ -108,7 +109,7 @@ const FK_SECC_OFIC = "id_oficina";
 // Seed data file
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-const DATA_PATH = path.join(__dirname, "seed-data", "unidad-organizacional.json");
+const DATA_PATH = path.join(__dirname, "../seed-data", "unidad-organizacional.json");
 
 // Safety switch
 const ALLOW_SEED = process.env.ALLOW_DB_SEED === "true";

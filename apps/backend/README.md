@@ -126,3 +126,46 @@ id_rol = 1 (administrador) ó 2 (soporte)
 1 usuario puede tener muchos roles
 1 rol puede tener muchos usuarios
 
+<p align="center">
+  Endpoints Backend
+</p>
+
+Todos poseen este formato:
+```
+GET /catalogos/:key
+```
+
+Las que se definieron:
+
+```
+GET /catalogos/tipo-adquisicion
+```
+```
+GET /catalogos/modalidad
+```
+```
+GET /catalogos/unidad-gestora
+```
+```
+GET /catalogos/clasificacion-activo
+```
+```
+GET /catalogos/estado-activo
+```
+```
+GET /catalogos/cargo  
+```
+```
+GET /catalogos/tipo-interfaz
+```
+```
+GET /catalogos/estado-ip
+```
+```
+GET /catalogos/tipo-usabilidad
+```
+```
+GET /catalogos/tipo-asignacion
+``` 
+
+Estos aparecen en catalogos.services.ts

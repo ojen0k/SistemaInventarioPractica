@@ -1,6 +1,8 @@
-Correr back:
-
+Correr back: /apps/backend
 pnpm start:dev
+
+Correr Front: /apps/frontend
+pnpm dev
 
 
 

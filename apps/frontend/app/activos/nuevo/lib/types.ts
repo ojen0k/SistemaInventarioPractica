@@ -24,7 +24,7 @@ export type FormState = {
     ubicacionTexto: string;
     observacionActivo: string;
 
-    // Step 3 (luego)
+    // Step 3
     procesador: string;
     memoria: string;
     almacenamiento: string;
@@ -34,8 +34,12 @@ export type FormState = {
     macWifi: string;
     ip: string;
 
-    // Step 4 (luego)
-    orgPathTexto: string;
+    // Step 4
+    areaId: string;
+    direccionId: string;
+    departamentoId: string;
+    oficinaId: string;
+    seccionProgramaId: string;
     responsableNombre: string;
     cargoId: string;
     fechaAsignacion: string;

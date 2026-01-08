@@ -6,6 +6,7 @@ import { AppService } from './app.service';
 import { PrismaModule } from './prisma/prisma.module';
 
 import { CatalogosModule } from './catalogos/catalogos.module';
+import { OrgModule } from './org/org.module';
 
 
 @Module({
@@ -14,7 +15,9 @@ import { CatalogosModule } from './catalogos/catalogos.module';
       isGlobal: true,
     }),
     PrismaModule,
-    CatalogosModule,],
+    CatalogosModule,
+    OrgModule,
+  ],
   controllers: [AppController],
   providers: [AppService],
 })

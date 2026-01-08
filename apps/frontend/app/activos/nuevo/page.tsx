@@ -51,7 +51,11 @@ export default function NuevoActivoPage() {
         macWifi: "",
         ip: "",
 
-        orgPathTexto: "",
+        areaId: "",
+        direccionId: "",
+        departamentoId: "",
+        oficinaId: "",
+        seccionProgramaId: "",
         responsableNombre: "",
         cargoId: "",
         fechaAsignacion: "",
@@ -134,6 +138,12 @@ export default function NuevoActivoPage() {
             return null;
         }
         if (s === 4) {
+            if (!form.areaId) return "Selecciona Área.";
+            if (!form.direccionId) return "Selecciona Dirección.";
+            if (!form.departamentoId) return "Selecciona Departamento.";
+            if (!form.oficinaId) return "Selecciona Oficina.";
+            if (!form.seccionProgramaId) return "Selecciona Sección/Programa.";
+
             if (!form.responsableNombre.trim()) return "Nombre responsable es obligatorio.";
             if (!form.cargoId) return "Selecciona cargo.";
             if (!form.fechaAsignacion) return "Fecha asignación es obligatoria.";

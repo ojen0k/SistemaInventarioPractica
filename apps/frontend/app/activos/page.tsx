@@ -1,78 +1,95 @@
-type Activo = {
-    id: number;
-    nombre: string;
-    clasificacion: string;
-    estado: string;
-    unidadGestora: string;
-};
+"use client";
 
-const MOCK: Activo[] = [
-    {
-        id: 1,
-        nombre: "Notebook Dell Latitude 5420",
-        clasificacion: "Computadoras",
-        estado: "En servicio",
-        unidadGestora: "Municipal",
-    },
-    {
-        id: 2,
-        nombre: "Impresora HP LaserJet Pro M404",
-        clasificacion: "Impresoras",
-        estado: "Disponible",
-        unidadGestora: "Educación",
-    },
-    {
-        id: 3,
-        nombre: "Router MikroTik hEX",
-        clasificacion: "Accesorios",
-        estado: "En servicio",
-        unidadGestora: "Salud",
-    },
-];
+import { useEffect, useState } from "react";
+import { fetchActivos, type ActivoRow } from "./nuevo/lib/activos";
 
 export default function ActivosPage() {
+    const [rows, setRows] = useState<ActivoRow[]>([]);
+    const [loading, setLoading] = useState(true);
+    const [err, setErr] = useState<string | null>(null);
+
+    useEffect(() => {
+        let alive = true;
+
+        (async () => {
+            try {
+                setLoading(true);
+                setErr(null);
+                const data = await fetchActivos();
+                if (alive) setRows(data);
+            } catch (e: any) {
+                if (alive) setErr(e?.message ?? "Error cargando activos");
+            } finally {
+                if (alive) setLoading(false);
+            }
+        })();
+
+        return () => {
+            alive = false;
+        };
+    }, []);
+
     return (
-        <div className="space-y-4">
-            <div className="flex items-end justify-between gap-3">
-                <div>
-                    <h1 className="text-xl font-semibold">Activos</h1>
-                    <p className="text-sm text-gray-600">
-                        Listado de activos registrados (mock por ahora).
-                    </p>
+        <div className="p-6">
+            <h1 className="text-xl font-semibold">Activos</h1>
+
+            {loading && <p className="mt-3 text-sm text-gray-600">Cargando...</p>}
+
+            {err && (
+                <div className="mt-3 rounded-md border border-red-300 bg-red-50 p-3 text-sm">
+                    {err}
                 </div>
+            )}
 
-                <a
-                    href="/activos/nuevo"
-                    className="rounded-md border px-3 py-2 text-sm hover:bg-gray-50"
-                >
-                    + Registrar activo
-                </a>
-            </div>
-
-            <div className="rounded-lg border overflow-hidden">
-                <table className="w-full text-sm">
-                    <thead className="bg-gray-50">
-                        <tr className="text-left">
-                            <th className="p-3">ID</th>
-                            <th className="p-3">Nombre</th>
-                            <th className="p-3">Clasificación</th>
-                            <th className="p-3">Estado</th>
-                            <th className="p-3">Unidad gestora</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {MOCK.map((a) => (
-                            <tr key={a.id} className="border-t">
-                                <td className="p-3">{a.id}</td>
-                                <td className="p-3">{a.nombre}</td>
-                                <td className="p-3">{a.clasificacion}</td>
-                                <td className="p-3">{a.estado}</td>
-                                <td className="p-3">{a.unidadGestora}</td>
+            {!loading && !err && (
+                <div className="mt-4 overflow-auto rounded-lg border">
+                    <table className="min-w-[1100px] w-full text-left text-sm">
+                        <thead className="bg-gray-50">
+                            <tr className="border-b">
+                                <th className="p-3">ID</th>
+                                <th className="p-3">Producto</th>
+                                <th className="p-3">Clasificación</th>
+                                <th className="p-3">Estado</th>
+                                <th className="p-3">Marca</th>
+                                <th className="p-3">Modelo</th>
+                                <th className="p-3">Serie</th>
+                                <th className="p-3">OC</th>
+                                <th className="p-3">Proveedor</th>
+                                <th className="p-3">Responsable</th>
+                                <th className="p-3">Sección</th>
                             </tr>
-                        ))}
-                    </tbody>
-                </table>
-            </div>
+                        </thead>
+                        <tbody>
+                            {rows.map((r) => (
+                                <tr key={r.id} className="border-b">
+                                    <td className="p-3">{r.id}</td>
+                                    <td className="p-3">{r.producto ?? "-"}</td>
+                                    <td className="p-3">{r.clasificacion ?? "-"}</td>
+                                    <td className="p-3">{r.estado ?? "-"}</td>
+                                    <td className="p-3">{r.marca ?? "-"}</td>
+                                    <td className="p-3">{r.modelo ?? "-"}</td>
+                                    <td className="p-3">{r.serie ?? "-"}</td>
+                                    <td className="p-3">{r.oc ?? "-"}</td>
+                                    <td className="p-3">
+                                        {r.proveedorNombre ?? "-"}
+                                        {r.proveedorRut ? ` (${r.proveedorRut})` : ""}
+                                    </td>
+                                    <td className="p-3">{r.responsable ?? "-"}</td>
+                                    <td className="p-3">{r.seccion ?? "-"}</td>
+                                </tr>
+                            ))}
+
+                            {rows.length === 0 && (
+                                <tr>
+                                    <td className="p-3 text-gray-600" colSpan={11}>
+                                        No hay activos registrados.
+                                    </td>
+                                </tr>
+                            )}
+                        </tbody>
+                    </table>
+                </div>
+            )}
         </div>
     );
 }

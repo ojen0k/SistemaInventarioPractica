@@ -27,7 +27,7 @@ export function StepNav({
                 type="button"
                 className="rounded-md border px-4 py-2 text-sm hover:bg-gray-50 disabled:opacity-50"
                 onClick={onBack}
-                disabled={!canBack}
+                disabled={!canBack || Boolean(error)}
             >
                 Atrás
             </button>
@@ -40,7 +40,7 @@ export function StepNav({
                         type="button"
                         className="rounded-md bg-black px-4 py-2 text-sm text-white hover:opacity-90 disabled:opacity-50"
                         onClick={onNext}
-                        disabled={!canNext}
+                        disabled={!canNext || Boolean(error)}
                     >
                         Siguiente
                     </button>
@@ -48,7 +48,7 @@ export function StepNav({
                     <button
                         type="button"
                         onClick={onSave}
-                        disabled={saving}
+                        disabled={saving || Boolean(error)}
                         className="rounded-md bg-black px-4 py-2 text-sm text-white disabled:opacity-50"
                     >
                         {saving ? "Guardando..." : "Guardar"}

@@ -1,5 +1,13 @@
 import type { CatalogItem, FormState } from "../../lib/types";
 import { Field } from "../Field";
+import { useEffect, useState } from "react";
+
+const API = process.env.NEXT_PUBLIC_API_URL;
+
+type ProvLookup = {
+    found: boolean;
+    nombre?: string;
+};
 
 export function StepCompra({
     form,
@@ -14,6 +22,48 @@ export function StepCompra({
     tipoAdquisicion: CatalogItem[];
     modalidades: CatalogItem[];
 }) {
+
+    const [nombreTouched, setNombreTouched] = useState(false);
+    const [provInfo, setProvInfo] = useState<ProvLookup | null>(null);
+
+    useEffect(() => {
+        const rut = (form.rutProveedor ?? "").trim();
+
+
+        if (!rut) {
+            setProvInfo(null);
+            return;
+        }
+
+        const t = setTimeout(async () => {
+            try {
+                if (!API) return; // no tirar error en UI, solo no autocompletar
+
+                const res = await fetch(
+                    `${API}/proveedores/by-rut?rut=${encodeURIComponent(rut)}`,
+                    { cache: "no-store" }
+                );
+
+                if (!res.ok) return;
+
+                const data = (await res.json()) as ProvLookup;
+                setProvInfo(data);
+
+                // solo se autocompleta si:
+                // - existe proveedor
+                // - viene nombre
+                // - el usuario no ha escrito manualmente el nombre
+                if (data.found && data.nombre && !nombreTouched) {
+                    set("nombreProveedor", data.nombre);
+                }
+            } catch {
+
+            }
+        }, 500);
+
+        return () => clearTimeout(t);
+    }, [form.rutProveedor, nombreTouched, set]);
+
     return (
         <div className="space-y-4">
             <h2 className="text-base font-semibold">Orden de compra</h2>
@@ -87,7 +137,11 @@ export function StepCompra({
                     <input
                         className="w-full rounded-md border px-3 py-2 text-sm"
                         value={form.rutProveedor}
-                        onChange={(e) => set("rutProveedor", e.target.value)}
+                        onChange={(e) => {
+                            // si el usuario cambia el rut, permitimos que vuelva a autocompletar
+                            setNombreTouched(false);
+                            set("rutProveedor", e.target.value);
+                        }}
                         placeholder="Ej: 12.345.678-9"
                         disabled={loading}
                     />
@@ -97,10 +151,16 @@ export function StepCompra({
                     <input
                         className="w-full rounded-md border px-3 py-2 text-sm"
                         value={form.nombreProveedor}
-                        onChange={(e) => set("nombreProveedor", e.target.value)}
+                        onChange={(e) => {
+                            setNombreTouched(true);
+                            set("nombreProveedor", e.target.value);
+                        }}
                         placeholder="Ej: Proveedor SpA"
                         disabled={loading}
                     />
+                    {provInfo?.found && (
+                        <p className="mt-1 text-xs text-gray-600">Proveedor encontrado por RUT.</p>
+                    )}
                 </Field>
             </div>
         </div>

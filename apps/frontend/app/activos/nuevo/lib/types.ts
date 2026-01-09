@@ -5,6 +5,8 @@ export type CatalogItem = {
 };
 
 export type FormState = {
+
+    ipDisponible?: boolean | null; // null = no se ha validado o vacío
     // Step 1
     ordenCompra: string;
     tipoAdquisicionId: string;

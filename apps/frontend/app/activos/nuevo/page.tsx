@@ -68,6 +68,9 @@ export default function NuevoActivoPage() {
         fechaAsignacion: "",
         tipoAsignacionId: "",
         observacionAsignacion: "",
+
+        ipDisponible: null,
+
     });
 
     function set<K extends keyof FormState>(key: K, value: FormState[K]) {
@@ -135,6 +138,7 @@ export default function NuevoActivoPage() {
 
     function validateStep(s: Step): string | null {
         if (s === 1) {
+
             if (!form.ordenCompra.trim()) return "Orden de compra es obligatoria.";
             if (!form.rutProveedor.trim()) return "RUT proveedor es obligatorio.";
             if (!form.nombreProveedor.trim()) return "Nombre proveedor es obligatorio.";
@@ -144,6 +148,25 @@ export default function NuevoActivoPage() {
             if (!form.nombreActivo.trim()) return "Nombre del activo es obligatorio.";
             return null;
         }
+        if (s === 3) {
+            // si no aplica (no es computador), no bloquear
+            if (!needsPcSpecs) return null;
+
+            const ip = (form.ip ?? "").trim();
+
+            // IP es opcional: si está vacío, se permite continuar
+            if (!ip) return null;
+
+            // mientras valida, bloquea avance
+            if (form.ipDisponible == null) return "Validando IP...";
+
+            // IP ocupada, bloquea avance
+            if (form.ipDisponible === false) return "La IP está ocupada. Cambia la IP o déjala vacía.";
+
+            return null;
+        }
+
+
         if (s === 4) {
             if (!form.areaId) return "Selecciona Área.";
             if (!form.direccionId) return "Selecciona Dirección.";

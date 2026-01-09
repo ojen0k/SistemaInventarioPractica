@@ -164,4 +164,70 @@ export class ActivosService {
             };
         });
     }
+    //Listar activos
+    async list() {
+        const rows = await this.prisma.activo.findMany({
+            orderBy: { id_activo: "desc" },
+            take: 200,
+            select: {
+                id_activo: true,
+                producto: true,
+                marca: true,
+                modelo: true,
+                numero_serie: true,
+                descripcion: true,
+                creado_en: true,
+
+                // ✅ nombres reales de relaciones según tu schema.prisma
+                estado_activo: { select: { nombre: true } },
+                clasificacion_activo: { select: { nombre: true } },
+
+                compra: {
+                    select: {
+                        orden_compra: true,
+                        anio: true,
+                        proveedor: { select: { rut_proveedor: true, nombre_proveedor: true } },
+                    },
+                },
+
+                asignaciones: {
+                    take: 1,
+                    orderBy: { id_asignacion_activo: "desc" },
+                    select: {
+                        nombre_responsable: true,
+                        ubicacion_interna: true,
+                        fecha_asignacion: true,
+                        seccion_programa: { select: { nombre: true } },
+                    },
+                },
+            },
+        });
+
+        return rows.map((a) => ({
+            id: a.id_activo,
+            producto: a.producto ?? null,
+            marca: a.marca ?? null,
+            modelo: a.modelo ?? null,
+            serie: a.numero_serie ?? null,
+            descripcion: a.descripcion ?? null,
+
+            estado: a.estado_activo?.nombre ?? null,
+            clasificacion: a.clasificacion_activo?.nombre ?? null,
+
+            oc: a.compra?.orden_compra ?? null,
+            anio: a.compra?.anio ?? null,
+            proveedorRut: a.compra?.proveedor?.rut_proveedor ?? null,
+            proveedorNombre: a.compra?.proveedor?.nombre_proveedor ?? null,
+
+            responsable: a.asignaciones?.[0]?.nombre_responsable ?? null,
+            ubicacion: a.asignaciones?.[0]?.ubicacion_interna ?? null,
+            seccion: a.asignaciones?.[0]?.seccion_programa?.nombre ?? null,
+            fechaAsignacion: a.asignaciones?.[0]?.fecha_asignacion ?? null,
+
+            fechaRegistro: a.creado_en, // ✅ tu campo real
+        }));
+    }
+
 }
+
+

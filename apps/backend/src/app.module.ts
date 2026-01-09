@@ -8,6 +8,8 @@ import { PrismaModule } from './prisma/prisma.module';
 import { CatalogosModule } from './catalogos/catalogos.module';
 import { OrgModule } from './org/org.module';
 import { ActivosModule } from './activos/activos.module';
+import { IpsModule } from './ips/ips.module';
+import { ProveedoresModule } from './proveedores/proveedores.module';
 
 
 @Module({
@@ -19,6 +21,8 @@ import { ActivosModule } from './activos/activos.module';
     CatalogosModule,
     OrgModule,
     ActivosModule,
+    IpsModule,
+    ProveedoresModule,
   ],
   controllers: [AppController],
   providers: [AppService],

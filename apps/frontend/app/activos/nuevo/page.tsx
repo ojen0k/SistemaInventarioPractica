@@ -13,16 +13,23 @@ import { StepAsignacion } from "./components/steps/StepAsignacion";
 
 
 export default function NuevoActivoPage() {
+    // Estado de la página
     const [step, setStep] = useState<Step>(1);
     const [loadingCats, setLoadingCats] = useState(true);
     const [errorCats, setErrorCats] = useState<string | null>(null);
 
+    // Catálogos
     const [tipoAdquisicion, setTipoAdquisicion] = useState<any[]>([]);
     const [modalidades, setModalidades] = useState<any[]>([]);
     const [clasificaciones, setClasificaciones] = useState<any[]>([]);
     const [estados, setEstados] = useState<any[]>([]);
     const [cargos, setCargos] = useState<any[]>([]);
     const [tiposAsignacion, setTiposAsignacion] = useState<any[]>([]);
+
+    // Estado de guardado
+    const [saving, setSaving] = useState(false);
+    const [saveError, setSaveError] = useState<string | null>(null);
+    const [saveOk, setSaveOk] = useState<any>(null);
 
     const [form, setForm] = useState<FormState>({
         ordenCompra: "",
@@ -160,25 +167,7 @@ export default function NuevoActivoPage() {
             setStep(needsPcSpecs ? 3 : 4);
             return;
         }
-        {
-            step === 3 && (
-                <StepPcSpecs
-                    form={form}
-                    set={set}
-                />
-            )
-        }
-        {
-            step === 4 && (
-                <StepAsignacion
-                    form={form}
-                    set={set}
-                    loading={loadingCats}
-                    cargos={active(cargos)}
-                    tiposAsignacion={active(tiposAsignacion)}
-                />
-            )
-        }
+
         if (step < 4) setStep((step + 1) as Step);
     }
 
@@ -190,10 +179,47 @@ export default function NuevoActivoPage() {
         if (step > 1) setStep((step - 1) as Step);
     }
 
-    function onSaveMock() {
-        console.log("FORM STATE:", form);
-        alert("Por ahora: guardado mock (revisa consola).");
+    // Funcion de guardar activo para hacer POST
+    async function onSave() {
+        setSaving(true);
+        setSaveError(null);
+        setSaveOk(null);
+
+        try {
+            const API = process.env.NEXT_PUBLIC_API_URL;
+            if (!API) throw new Error("NEXT_PUBLIC_API_URL no está definida.");
+
+            const res = await fetch(`${API}/activos`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(form),
+            });
+
+            const text = await res.text();
+            let data: any = null;
+            try {
+                data = text ? JSON.parse(text) : null;
+            } catch {
+                data = { raw: text };
+            }
+
+            if (!res.ok) {
+                const msg = data?.message
+                    ? Array.isArray(data.message)
+                        ? data.message.join(" | ")
+                        : String(data.message)
+                    : `Error HTTP ${res.status}`;
+                throw new Error(msg);
+            }
+
+            setSaveOk(data);
+        } catch (e: any) {
+            setSaveError(e?.message ?? "Error desconocido");
+        } finally {
+            setSaving(false);
+        }
     }
+
 
     return (
         <div className="space-y-4">
@@ -233,6 +259,23 @@ export default function NuevoActivoPage() {
                     />
                 )}
 
+                {step === 3 && (
+                    <StepPcSpecs
+                        form={form}
+                        set={set}
+                    />
+                )}
+
+                {step === 4 && (
+                    <StepAsignacion
+                        form={form}
+                        set={set}
+                        loading={loadingCats}
+                        cargos={active(cargos)}
+                        tiposAsignacion={active(tiposAsignacion)}
+                    />
+                )}
+
 
                 <StepNav
                     canBack={step !== 1}
@@ -241,7 +284,10 @@ export default function NuevoActivoPage() {
                     error={stepError}
                     onBack={back}
                     onNext={next}
-                    onSave={onSaveMock}
+                    onSave={onSave}
+                    saving={saving}
+                    saveError={saveError}
+                    saveOk={saveOk}
                 />
             </div>
         </div>

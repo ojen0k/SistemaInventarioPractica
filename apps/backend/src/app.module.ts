@@ -7,6 +7,7 @@ import { PrismaModule } from './prisma/prisma.module';
 
 import { CatalogosModule } from './catalogos/catalogos.module';
 import { OrgModule } from './org/org.module';
+import { ActivosModule } from './activos/activos.module';
 
 
 @Module({
@@ -17,6 +18,7 @@ import { OrgModule } from './org/org.module';
     PrismaModule,
     CatalogosModule,
     OrgModule,
+    ActivosModule,
   ],
   controllers: [AppController],
   providers: [AppService],

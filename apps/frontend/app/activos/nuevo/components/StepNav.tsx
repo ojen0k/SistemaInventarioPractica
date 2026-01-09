@@ -6,6 +6,9 @@ export function StepNav({
     onBack,
     onNext,
     onSave,
+    saving,
+    saveError,
+    saveOk,
 }: {
     canBack: boolean;
     canNext: boolean;
@@ -14,6 +17,9 @@ export function StepNav({
     onBack: () => void;
     onNext: () => void;
     onSave: () => void;
+    saving: boolean;
+    saveError: string | null;
+    saveOk: any;
 }) {
     return (
         <div className="flex items-center justify-between gap-3 pt-2">
@@ -41,12 +47,25 @@ export function StepNav({
                 ) : (
                     <button
                         type="button"
-                        className="rounded-md bg-black px-4 py-2 text-sm text-white hover:opacity-90 disabled:opacity-50"
                         onClick={onSave}
-                        disabled={!canNext}
+                        disabled={saving}
+                        className="rounded-md bg-black px-4 py-2 text-sm text-white disabled:opacity-50"
                     >
-                        Guardar (mock)
+                        {saving ? "Guardando..." : "Guardar"}
                     </button>
+                )}
+                {saveError && (
+                    <div className="mt-3 rounded-md border border-red-300 bg-red-50 p-3 text-sm">
+                        <div className="font-medium">Error</div>
+                        <div>{saveError}</div>
+                    </div>
+                )}
+
+                {saveOk && (
+                    <div className="mt-3 rounded-md border border-green-300 bg-green-50 p-3 text-sm">
+                        <div className="font-medium">Guardado OK</div>
+                        <pre className="mt-2 overflow-auto text-xs">{JSON.stringify(saveOk, null, 2)}</pre>
+                    </div>
                 )}
             </div>
         </div>

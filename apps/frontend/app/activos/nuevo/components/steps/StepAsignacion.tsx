@@ -74,6 +74,7 @@ export function StepAsignacion({
         };
     }, [form.areaId]);
 
+    // Cascada: cuando cambia dirección, carga departamentos
     useEffect(() => {
         let cancelled = false;
         async function load() {
@@ -100,6 +101,7 @@ export function StepAsignacion({
         };
     }, [form.direccionId]);
 
+    // Cascada: cuando cambia departamento, carga oficinas
     useEffect(() => {
         let cancelled = false;
         async function load() {
@@ -125,6 +127,7 @@ export function StepAsignacion({
         };
     }, [form.departamentoId]);
 
+    // Cascada: cuando cambia oficina, carga secciones/programas
     useEffect(() => {
         let cancelled = false;
         async function load() {
@@ -149,6 +152,7 @@ export function StepAsignacion({
         };
     }, [form.oficinaId]);
 
+    // Cambios manuales
     function changeArea(v: string) {
         set("areaId", v);
         set("direccionId", "");

@@ -1,6 +1,12 @@
 import { BadRequestException, Injectable } from "@nestjs/common";
 import { PrismaService } from "../prisma/prisma.service";
 
+function mapRow(row: any) {
+    // estandariza para el front (id como string)
+    return { id: String(row.id), nombre: row.nombre, activo: row.activo };
+}
+
+
 @Injectable()
 export class OrgService {
     constructor(private prisma: PrismaService) { }

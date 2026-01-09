@@ -1,6 +1,7 @@
 import { PrismaClient } from "@prisma/client";
 import { PrismaMssql } from "@prisma/adapter-mssql";
 import "dotenv/config";
+import * as process from "node:process";
 
 // ========================
 // Seguridad (prod)
@@ -165,6 +166,19 @@ async function main() {
         prisma.cat_tipo_asignacion,
         CATALOGOS.cat_tipo_asignacion
     );
+    // tipo_activo (necesario para crear activos)
+    const tipoActivoNombre = "General";
+
+    const tipoActivoExiste = await prisma.tipo_activo.findFirst({
+        where: { nombre: tipoActivoNombre },
+        select: { id_tipo_activo: true },
+    });
+
+    if (!tipoActivoExiste) {
+        await prisma.tipo_activo.create({
+            data: { nombre: tipoActivoNombre, activo: true },
+        });
+    }
 
     console.log("🎉 Seed de catálogos completado.");
 }

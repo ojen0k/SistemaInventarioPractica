@@ -1,3 +1,4 @@
+1.- Correr apps
 Correr back: /apps/backend
 pnpm start:dev
 
@@ -5,8 +6,24 @@ Correr Front: /apps/frontend
 pnpm dev
 
 
+2.- Instalar dependencias:
 
-Generar cliente y validar:
+Para instalar usando pnpm se debe tenemos primero pnpm:
+pnpm install
+
+Dependencias de AuthModule(jwt):
+pnpm add @nestjs/jwt passport passport-jwt bcrypt
+pnpm add -D @types/passport-jwt @types/bcrypt
+
+Passport:
+pnpm add @nestjs/passport passport passport-jwt
+pnpm add -D @types/passport-jwt
+
+
+
+
+
+3.- Generar cliente y validar:
 
 pnpm dlx prisma validate (valida que el schema sea correcto)
 pnpm dlx prisma generate (genera el cliente)
@@ -32,7 +49,7 @@ orden de comandos:
 
 
 
-Para agregar areas y estados de los catalogos (llamados cat_*nombre* dentro de la BD), se usan los comandos:
+4.- Para agregar areas y estados de los catalogos (llamados cat_*nombre* dentro de la BD), se usan los comandos:
 
 pnpm seed:areas (agrega areas y subareas)
 pnpm seed:catalogos (agrega estados de los catalogos) 
@@ -42,7 +59,7 @@ cada seed tiene su .json y readme para las instrucciones de como usarlo y agrega
 
 
 
-Querys en SQL Server:
+5.- Querys en SQL Server:
 
 Para ver las areas y subareas:
 

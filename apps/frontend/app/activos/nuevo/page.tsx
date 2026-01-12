@@ -11,9 +11,20 @@ import { StepInventario } from "./components/steps/StepInventario";
 import { StepPcSpecs } from "./components/steps/StepPCSpecs";
 import { StepAsignacion } from "./components/steps/StepAsignacion";
 
+//proteccion de sesion
+import { useRouter } from "next/navigation";
+import { useRequireAuth } from "../../lib/useRequireAuth";
+
 
 export default function NuevoActivoPage() {
-    // Estado de la página
+
+    //Hooks
+    const router = useRouter();
+    const token = useRequireAuth();
+
+    if (!token) return null;
+
+    //Estado de la página
     const [step, setStep] = useState<Step>(1);
     const [loadingCats, setLoadingCats] = useState(true);
     const [errorCats, setErrorCats] = useState<string | null>(null);
@@ -30,6 +41,8 @@ export default function NuevoActivoPage() {
     const [saving, setSaving] = useState(false);
     const [saveError, setSaveError] = useState<string | null>(null);
     const [saveOk, setSaveOk] = useState<any>(null);
+
+
 
     const [form, setForm] = useState<FormState>({
         ordenCompra: "",

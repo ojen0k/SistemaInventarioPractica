@@ -3,11 +3,23 @@
 import { useEffect, useState } from "react";
 import { fetchActivos, type ActivoRow } from "./nuevo/lib/activos";
 
+//Proteccion de logeo
+import { useRouter } from "next/navigation";
+import { useRequireAuth } from "../lib/useRequireAuth";
+
 export default function ActivosPage() {
+    //Hooks
+    const router = useRouter();
+    const token = useRequireAuth();
+
+    if (!token) return null;
+
+    //Estado de la página
     const [rows, setRows] = useState<ActivoRow[]>([]);
     const [loading, setLoading] = useState(true);
     const [err, setErr] = useState<string | null>(null);
 
+    //Carga de datos
     useEffect(() => {
         let alive = true;
 
@@ -29,6 +41,7 @@ export default function ActivosPage() {
         };
     }, []);
 
+    //UI
     return (
         <div className="p-6">
             <h1 className="text-xl font-semibold">Activos</h1>

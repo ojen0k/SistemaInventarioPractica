@@ -20,7 +20,8 @@
     "test:e2e": "jest --config ./test/jest-e2e.json",
     "db:seed": "prisma db seed",
     "seed:areas": "pnpm exec tsx prisma/scripts/seedAreas.ts",
-    "seed:catalogos": "pnpm exec tsx prisma/scripts/seedCatalogos.ts"
+    "seed:catalogos": "pnpm exec tsx prisma/scripts/seedCatalogos.ts",
+    "bootstrap:admin": "pnpm exec tsx prisma/scripts/bootstrapAdmin.ts"
   },
   "prisma": {
     "seed": "pnpm exec tsx prisma/scripts/seedRunner.ts"
@@ -50,6 +51,7 @@
     "@types/bcrypt": "^6.0.0",
     "@types/express": "^5.0.0",
     "@types/jest": "^30.0.0",
+    "@types/mssql": "^9.1.8",
     "@types/node": "^22.10.7",
     "@types/passport-jwt": "^4.0.1",
     "@types/supertest": "^6.0.2",

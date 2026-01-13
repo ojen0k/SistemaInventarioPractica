@@ -38,7 +38,7 @@ export class AuthService {
 
         const accessToken = await this.jwt.signAsync(payload);
 
-        // (Opcional) registra último acceso
+        //  registra último acceso
         await this.prisma.usuario.update({
             where: { id_usuario: user.id_usuario },
             data: { ultimo_acceso: new Date() },

@@ -12,7 +12,7 @@ export default function ActivosPage() {
     const router = useRouter();
     const token = useRequireAuth();
 
-    if (!token) return null;
+
 
     //Estado de la página
     const [rows, setRows] = useState<ActivoRow[]>([]);
@@ -21,6 +21,8 @@ export default function ActivosPage() {
 
     //Carga de datos
     useEffect(() => {
+        if (!token) return;
+
         let alive = true;
 
         (async () => {
@@ -39,7 +41,9 @@ export default function ActivosPage() {
         return () => {
             alive = false;
         };
-    }, []);
+    }, [token]);
+
+    if (!token) return null;
 
     //UI
     return (

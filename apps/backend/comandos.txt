@@ -57,9 +57,11 @@ pnpm seed:catalogos (agrega estados de los catalogos)
 cada seed tiene su .json y readme para las instrucciones de como usarlo y agregar datos
 
 
+5.- Bootstrap de admin (si es que está en true el valor del .env):
+pnpm bootstrap:admin
 
 
-5.- Querys en SQL Server:
+ Querys en SQL Server:
 
 Para ver las areas y subareas:
 

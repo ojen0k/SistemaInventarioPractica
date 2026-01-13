@@ -22,7 +22,7 @@ export default function NuevoActivoPage() {
     const router = useRouter();
     const token = useRequireAuth();
 
-    if (!token) return null;
+
 
     //Estado de la página
     const [step, setStep] = useState<Step>(1);
@@ -93,6 +93,8 @@ export default function NuevoActivoPage() {
     const active = (arr: any[]) => arr.filter((x) => x.activo !== false);
 
     useEffect(() => {
+        if (!token) return;
+
         let cancelled = false;
 
         async function loadCats() {
@@ -140,7 +142,9 @@ export default function NuevoActivoPage() {
         return () => {
             cancelled = true;
         };
-    }, []);
+    }, [token]);
+
+
 
     const clasificacionNombre = useMemo(() => {
         const found = clasificaciones.find((c) => c.id === form.clasificacionId);
@@ -148,6 +152,8 @@ export default function NuevoActivoPage() {
     }, [clasificaciones, form.clasificacionId]);
 
     const needsPcSpecs = useMemo(() => clasificacionNombre.includes("comput"), [clasificacionNombre]);
+
+    if (!token) return null;
 
     function validateStep(s: Step): string | null {
         if (s === 1) {

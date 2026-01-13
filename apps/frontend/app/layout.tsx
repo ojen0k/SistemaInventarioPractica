@@ -16,7 +16,7 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "Sistema Inventario",
-  description: "Primer MVP del front",
+  description: "MVP del front",
 };
 
 export default function RootLayout({

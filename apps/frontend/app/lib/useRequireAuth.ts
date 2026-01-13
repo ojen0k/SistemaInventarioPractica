@@ -1,16 +1,21 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { getToken } from "./auth";
 
 export function useRequireAuth() {
     const router = useRouter();
-    const token = getToken();
+    const [token, setToken] = useState<string | null>(null);
 
     useEffect(() => {
-        if (!token) router.replace("/login");
-    }, [router, token]);
+        const t = getToken();
+        if (!t) {
+            router.replace("/login");
+        } else {
+            setToken(t);
+        }
+    }, [router]);
 
     return token;
 }

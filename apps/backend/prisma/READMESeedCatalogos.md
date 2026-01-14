@@ -1,8 +1,8 @@
 # Seed Catálogos
 
 Este script carga catálogos base del sistema (tipos, estados y clasificaciones) de forma **idempotente**:
-- Si el valor ya existe (por `nombre`), no lo duplica.
-- Si falta, lo crea con `activo=true`.
+- Si el valor ya existe (por 'nombre'), no lo duplica.
+- Si falta, lo crea con 'activo=true'.
 
 ## Script
 - `prisma/scripts/seedCatalogos.ts`

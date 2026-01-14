@@ -59,8 +59,8 @@ export default function ActivosPage() {
             )}
 
             {!loading && !err && (
-                <div className="mt-4 overflow-auto rounded-lg border">
-                    <table className="min-w-[1100px] w-full text-left text-sm">
+                <div className="mt-4 overflow-auto">
+                    <table className="min-w-[1100px] w-full text-left text-sm overflow-auto border">
                         <thead className="bg-gray-50">
                             <tr className="border-b">
                                 <th className="p-3">ID</th>

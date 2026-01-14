@@ -20,6 +20,9 @@ pnpm add @nestjs/passport passport passport-jwt
 pnpm add -D @types/passport-jwt
 
 
+Class-validator:
+pnpm add class-validator class-transformer
+
 
 
 

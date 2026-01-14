@@ -119,7 +119,7 @@ async function seedUniqueNombre(
         created++;
     }
 
-    console.log(`✅ ${tabla}: creados=${created}, existentes=${existing}`);
+    console.log(`${tabla}: creados=${created}, existentes=${existing}`);
 }
 
 // ========================
@@ -180,12 +180,12 @@ async function main() {
         });
     }
 
-    console.log("🎉 Seed de catálogos completado.");
+    console.log("Seed de catálogos completado.");
 }
 
 main()
     .catch((e) => {
-        console.error("❌ Error en seedCatalogos:", e);
+        console.error("Error en seedCatalogos:", e);
         process.exitCode = 1;
     })
     .finally(async () => {

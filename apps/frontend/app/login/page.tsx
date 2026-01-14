@@ -32,6 +32,7 @@ export default function LoginPage() {
 
             setToken(data.accessToken);
             router.push("/activos");
+
         } catch (e: any) {
             setErr(e?.message ?? "Error");
         } finally {
@@ -40,9 +41,9 @@ export default function LoginPage() {
     }
 
     return (
-        <div className="min-h-[calc(100vh-60px)] flex items-center justify-center p-6">
-            <div className="w-full max-w-md rounded-xl border bg-white p-6">
-                <h1 className="text-xl font-semibold">Iniciar sesión</h1>
+        <div className="min-h-[calc(100vh-60px)] flex items-center w-full justify-center p-6">
+            <div className="w-full max-w-md p-8 rounded-xl bg-white shadow-lg">
+                <h1 className="text-2xl font-semibold text-center mb-2">Iniciar sesión</h1>
 
                 {err && (
                     <div className="mt-4 rounded-md border border-red-300 bg-red-50 p-3 text-sm text-red-700">

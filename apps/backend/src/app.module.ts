@@ -12,6 +12,7 @@ import { IpsModule } from './ips/ips.module';
 import { ProveedoresModule } from './proveedores/proveedores.module';
 
 import { AuthModule } from './auth/auth.module';
+import { UsuariosModule } from './usuarios/usuarios.module';
 
 
 @Module({
@@ -26,6 +27,7 @@ import { AuthModule } from './auth/auth.module';
     IpsModule,
     ProveedoresModule,
     AuthModule,
+    UsuariosModule,
   ],
   controllers: [AppController],
   providers: [AppService],

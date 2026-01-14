@@ -1,4 +1,5 @@
 export const TOKEN_KEY = "accessToken";
+export const AUTH_EVENT_NAME = "auth-change";
 
 export function getToken(): string | null {
     if (typeof window === "undefined") return null;
@@ -7,10 +8,12 @@ export function getToken(): string | null {
 
 export function setToken(token: string) {
     localStorage.setItem(TOKEN_KEY, token);
+    window.dispatchEvent(new Event(AUTH_EVENT_NAME));
 }
 
 export function clearToken() {
     localStorage.removeItem(TOKEN_KEY);
+    window.dispatchEvent(new Event(AUTH_EVENT_NAME));
 }
 
 const API = process.env.NEXT_PUBLIC_API_URL;

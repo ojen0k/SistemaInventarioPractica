@@ -17,7 +17,7 @@ COPY --from=dependencies /app/node_modules ./node_modules
 COPY . .
 
 # Generamos el cliente de Prisma (necesario para conectar a SQL Server)
-RUN pnpm dlx prisma generate
+RUN pnpm exec prisma generate
 
 # Compilamos la aplicación NestJS
 RUN pnpm run build

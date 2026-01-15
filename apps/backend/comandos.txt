@@ -11,6 +11,13 @@ pnpm dev
 Para instalar usando pnpm se debe tenemos primero pnpm:
 pnpm install
 
+
+****/apps/backend:
+
+Dependencias de morgan y logger:
+pnpm add morgan
+pnpm add -D @types/morgan
+
 Dependencias de AuthModule(jwt):
 pnpm add @nestjs/jwt passport passport-jwt bcrypt
 pnpm add -D @types/passport-jwt @types/bcrypt

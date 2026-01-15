@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post } from "@nestjs/common";
+import { Body, Controller, Delete, Get, Param, Patch, Post } from "@nestjs/common";
 import { ActivosService } from "./activos.service";
 
 @Controller("activos")
@@ -13,5 +13,20 @@ export class ActivosController {
     @Get()
     list() {
         return this.service.list();
+    }
+
+    @Get(":id")
+    findOne(@Param("id") id: string) {
+        return this.service.findOne(Number(id));
+    }
+
+    @Delete(":id")
+    delete(@Param("id") id: string) {
+        return this.service.delete(Number(id));
+    }
+
+    @Patch(":id")
+    update(@Param("id") id: string, @Body() body: any) {
+        return this.service.update(Number(id), body);
     }
 }

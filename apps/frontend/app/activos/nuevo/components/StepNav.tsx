@@ -27,7 +27,7 @@ export function StepNav({
                 type="button"
                 className="rounded-md border px-4 py-2 text-sm hover:bg-gray-50 disabled:opacity-50"
                 onClick={onBack}
-                disabled={!canBack || Boolean(error)}
+                disabled={!canBack}
             >
                 Atrás
             </button>

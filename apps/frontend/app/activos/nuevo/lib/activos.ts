@@ -13,6 +13,7 @@ export type ActivoRow = {
     responsable: string | null;
     ubicacion: string | null;
     seccion: string | null;
+    ip: string | null;
     fechaRegistro: string;
 };
 

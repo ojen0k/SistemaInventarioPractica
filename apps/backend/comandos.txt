@@ -64,6 +64,37 @@ cada seed tiene su .json y readme para las instrucciones de como usarlo y agrega
 pnpm bootstrap:admin
 
 
+
+
+6.- Docker
+***sudo docker compose down && sudo DOCKER_BUILDKIT=1 docker compose build --no-cache && sudo docker compose up --force-recreate -d
+
+sudo: "SuperUser Do". En Ubuntu es obligatorio para tener permisos.
+
+docker compose down: Apaga y destruye los contenedores actuales. Limpia la mesa.
+
+&&: "Si lo anterior funcionó, entonces haz lo siguiente..."
+
+DOCKER_BUILDKIT=1: Activa el modo "Turbo" de Docker para construir más rápido y con características modernas.
+
+build --no-cache: Cocina todo desde cero. Le prohíbe a Docker usar "ingredientes guardados" (caché). Esto es vital si agregaste dependencias en package.json, para forzar que las descargue de nuevo.
+
+up --force-recreate -d: Levanta el sistema.
+
+--force-recreate: "Aunque el contenedor parezca estar bien, destrúyelo y créalo de nuevo por si acaso".
+
+-d (Detached): "Corre en segundo plano". Te devuelve el control de la terminal inmediatamente.
+
+
+
+
+
+ ***sudo docker compose down && sudo DOCKER_BUILDKIT=1 docker compose build --no-cache --progress=plain && sudo docker compose up --force-recreate -d
+
+--progress=plain: En lugar de mostrarte una barrita de carga bonita que oculta detalles, te muestra todo el texto plano.
+
+
+
  Querys en SQL Server:
 
 Para ver las areas y subareas:

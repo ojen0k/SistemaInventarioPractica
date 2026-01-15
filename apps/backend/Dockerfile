@@ -2,7 +2,10 @@ FROM node:20-alpine AS base
 WORKDIR /app
 
 # Instalar pnpm
-RUN npm install -g pnpm
+# Instalar pnpm
+RUN npm install -g pnpm && npm cache clean --force
+# Configurar pnpm para que cree node_modules planos (evita problemas con Prisma en Docker)
+RUN echo "node-linker=hoisted" > /root/.npmrc
 
 FROM base AS dependencies
 WORKDIR /app
@@ -32,6 +35,7 @@ COPY package.json pnpm-lock.yaml ./
 RUN pnpm install --prod --frozen-lockfile
 
 COPY --from=build /app/dist ./dist
+# Con 'hoisted', prisma suele generarse en node_modules/.prisma
 COPY --from=build /app/node_modules/.prisma ./node_modules/.prisma
 COPY --from=build /app/node_modules/@prisma ./node_modules/@prisma
 

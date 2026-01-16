@@ -267,6 +267,9 @@ model activo {
   creado_en      DateTime @default(now()) @db.DateTime2
   actualizado_en DateTime @updatedAt @db.DateTime2
 
+  id_usuario_creador Int?
+  usuario_creador    usuario? @relation("ActivoCreador", fields: [id_usuario_creador], references: [id_usuario])
+
   tipo_activo          tipo_activo               @relation(fields: [id_tipo_activo], references: [id_tipo_activo])
   compra               compra?                   @relation(fields: [id_compra], references: [id_compra])
   clasificacion_activo cat_clasificacion_activo? @relation(fields: [id_clasificacion_activo], references: [id_clasificacion_activo])
@@ -437,6 +440,7 @@ model usuario {
   actualizado_en DateTime @updatedAt @db.DateTime2
 
   roles usuario_rol[]
+  activos_creados activo[] @relation("ActivoCreador")
 
   @@map("usuario")
 }

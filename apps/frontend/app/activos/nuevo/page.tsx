@@ -160,6 +160,7 @@ export default function NuevoActivoPage() {
 
             if (!form.ordenCompra.trim()) return "Orden de compra es obligatoria.";
             if (!form.rutProveedor.trim()) return "RUT proveedor es obligatorio.";
+            if (!/^\d{1,2}\.\d{3}\.\d{3}-\d$/.test(form.rutProveedor)) return "RUT inválido (ej: 12.345.678-9)";
             if (!form.nombreProveedor.trim()) return "Nombre proveedor es obligatorio.";
             return null;
         }
@@ -233,7 +234,10 @@ export default function NuevoActivoPage() {
 
             const res = await fetch(`${API}/activos`, {
                 method: "POST",
-                headers: { "Content-Type": "application/json" },
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`
+                },
                 body: JSON.stringify(form),
             });
 
@@ -254,11 +258,13 @@ export default function NuevoActivoPage() {
                 throw new Error(msg);
             }
 
-            setSaveOk(data);
+            // redirigir a /activos con mensaje de éxito
+            const nombre = data?.nombre ?? form.nombreActivo ?? "Activo";
+            router.push(`/activos?created=${encodeURIComponent(nombre)}`);
+
         } catch (e: any) {
             setSaveError(e?.message ?? "Error desconocido");
-        } finally {
-            setSaving(false);
+            setSaving(false); // Solo detener loading si hay error, si hay éxito redirige
         }
     }
 

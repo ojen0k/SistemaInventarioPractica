@@ -5,7 +5,7 @@ import { PrismaService } from "../prisma/prisma.service";
 export class ActivosService {
     constructor(private readonly prisma: PrismaService) { }
 
-    async create(form: any) {
+    async create(form: any, userId?: number) {
 
         if (!form?.rutProveedor?.trim()) throw new BadRequestException("rutProveedor requerido");
         if (!form?.nombreProveedor?.trim()) throw new BadRequestException("nombreProveedor requerido");
@@ -75,6 +75,7 @@ export class ActivosService {
 
                     id_clasificacion_activo: form.clasificacionId ? Number(form.clasificacionId) : null,
                     id_estado_activo: Number(form.estadoId),
+                    id_usuario_creador: userId || null,
 
                     observacion: form.observacionActivo?.trim() || null,
                     detalles_json: JSON.stringify(detalles),
@@ -164,9 +165,74 @@ export class ActivosService {
             };
         });
     }
-    // Listar activos
-    async list() {
+    // Listar activos con filtros
+    async list(params: any = {}) {
+        const {
+            q,
+            tags, // string "tag1,tag2" or string[]
+            estadoId,
+            clasificacionId,
+            areaId,
+            direccionId,
+            departamentoId,
+            oficinaId,
+            seccionId,
+            creadoPorId, // para filtrar "Mis activos"
+        } = params;
+
+        const where: any = {};
+
+        // 1. Filtros directos
+        if (estadoId) where.id_estado_activo = Number(estadoId);
+        if (clasificacionId) where.id_clasificacion_activo = Number(clasificacionId);
+        if (creadoPorId) where.id_usuario_creador = Number(creadoPorId);
+
+        // 2. Jerarquía (cascade)
+        if (seccionId) {
+            where.asignaciones = { some: { id_seccion_programa: Number(seccionId) } };
+        } else if (oficinaId) {
+            where.asignaciones = { some: { seccion_programa: { id_oficina: Number(oficinaId) } } };
+        } else if (departamentoId) {
+            where.asignaciones = { some: { seccion_programa: { oficina: { id_departamento: Number(departamentoId) } } } };
+        } else if (direccionId) {
+            where.asignaciones = { some: { seccion_programa: { oficina: { departamento: { id_direccion: Number(direccionId) } } } } };
+        } else if (areaId) {
+            where.asignaciones = { some: { seccion_programa: { oficina: { departamento: { direccion: { id_area: Number(areaId) } } } } } };
+        }
+
+        // 3. Búsqueda Texto / Tags
+        // Unifica 'q' (busqueda simple) y 'tags' (busqueda múltiple)
+        const terms: string[] = [];
+        if (q && typeof q === 'string') terms.push(q);
+        if (tags) {
+            if (Array.isArray(tags)) terms.push(...tags);
+            else if (typeof tags === 'string') terms.push(...tags.split(','));
+        }
+
+        if (terms.length > 0) {
+            // AND implícito entre tags: El activo debe cumplir (Tag1) AND (Tag2)
+            // Cada Tag es un OR interno (match nombre OR modelo OR serial...)
+            where.AND = terms.map((t) => {
+                const term = t.trim();
+                return {
+                    OR: [
+                        { producto: { contains: term } }, // SqlServer default collation usually CI
+                        { marca: { contains: term } },
+                        { modelo: { contains: term } },
+                        { numero_serie: { contains: term } },
+                        { descripcion: { contains: term } },
+
+                        { asignaciones: { some: { nombre_responsable: { contains: term } } } },
+                        { asignaciones: { some: { rut_responsable: { contains: term } } } },
+                        { interfaces_red: { some: { interfaz_ip: { ip_recurso: { ip: { contains: term } } } } } },
+                        { compra: { orden_compra: { contains: term } } }
+                    ]
+                };
+            });
+        }
+
         const rows = await this.prisma.activo.findMany({
+            where,
             orderBy: { id_activo: "desc" },
             take: 200,
             select: {
@@ -178,9 +244,10 @@ export class ActivosService {
                 descripcion: true,
                 creado_en: true,
 
-                // ✅ nombres reales de relaciones según tu schema.prisma
+                // nombres reales de relaciones
                 estado_activo: { select: { nombre: true } },
                 clasificacion_activo: { select: { nombre: true } },
+                usuario_creador: { select: { nombre_usuario: true } },
 
                 compra: {
                     select: {
@@ -236,7 +303,8 @@ export class ActivosService {
             seccion: a.asignaciones?.[0]?.seccion_programa?.nombre ?? null,
             fechaAsignacion: a.asignaciones?.[0]?.fecha_asignacion ?? null,
 
-            fechaRegistro: a.creado_en, // ✅ tu campo real
+            fechaRegistro: a.creado_en,
+            creadoPor: a.usuario_creador?.nombre_usuario ?? null,
         }));
     }
 

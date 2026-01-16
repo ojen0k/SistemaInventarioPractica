@@ -25,6 +25,7 @@ export function StepCompra({
 
     const [nombreTouched, setNombreTouched] = useState(false);
     const [provInfo, setProvInfo] = useState<ProvLookup | null>(null);
+    const [rutError, setRutError] = useState<string | null>(null);
 
     useEffect(() => {
         const rut = (form.rutProveedor ?? "").trim();
@@ -138,13 +139,27 @@ export function StepCompra({
                         className="w-full rounded-md border px-3 py-2 text-sm"
                         value={form.rutProveedor}
                         onChange={(e) => {
-                            // si el usuario cambia el rut, permitimos que vuelva a autocompletar
+                            const val = e.target.value;
                             setNombreTouched(false);
-                            set("rutProveedor", e.target.value);
+                            set("rutProveedor", val);
+
+                            // Validación estricta formato visual
+                            // x.xxx.xxx-x ó xx.xxx.xxx-x
+                            const regex = /^\d{1,2}\.\d{3}\.\d{3}-\d$/;
+                            if (val && !regex.test(val)) {
+                                setRutError("Ingrese correctamente el RUT");
+                            } else {
+                                setRutError(null);
+                            }
                         }}
                         placeholder="Ej: 12.345.678-9"
                         disabled={loading}
                     />
+                    {rutError && (
+                        <p className="mt-1 text-xs text-red-600 font-medium">
+                            {rutError}
+                        </p>
+                    )}
                 </Field>
 
                 <Field label="Nombre proveedor">

@@ -187,131 +187,141 @@ export function StepAsignacion({
                 </div>
             )}
 
-            <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-                <Field label="Área">
-                    <select
-                        className="w-full rounded-md border px-3 py-2 text-sm"
-                        value={form.areaId}
-                        onChange={(e) => changeArea(e.target.value)}
-                        disabled={loadingOrg}
-                    >
-                        <option value="">Seleccione...</option>
-                        {areas.map((x) => (
-                            <option key={x.id} value={x.id}>{x.nombre}</option>
-                        ))}
-                    </select>
-                </Field>
+            <div className="flex gap-4">
+                <div className="w-full">
+                    <Field label="Área">
+                        <select
+                            className="w-full rounded-md border px-3 py-2 text-sm"
+                            value={form.areaId}
+                            onChange={(e) => changeArea(e.target.value)}
+                            disabled={loadingOrg}
+                        >
+                            <option value="">Seleccione...</option>
+                            {areas.map((x) => (
+                                <option key={x.id} value={x.id}>{x.nombre}</option>
+                            ))}
+                        </select>
+                    </Field>
 
-                <Field label="Dirección">
-                    <select
-                        className="w-full rounded-md border px-3 py-2 text-sm"
-                        value={form.direccionId}
-                        onChange={(e) => changeDireccion(e.target.value)}
-                        disabled={!form.areaId || loadingOrg}
-                    >
-                        <option value="">Seleccione...</option>
-                        {direcciones.map((x) => (
-                            <option key={x.id} value={x.id}>{x.nombre}</option>
-                        ))}
-                    </select>
-                </Field>
+                    <Field label="Dirección">
+                        <select
+                            className="w-full rounded-md border px-3 py-2 text-sm"
+                            value={form.direccionId}
+                            onChange={(e) => changeDireccion(e.target.value)}
+                            disabled={!form.areaId || loadingOrg}
+                        >
+                            <option value="">Seleccione...</option>
+                            {direcciones.map((x) => (
+                                <option key={x.id} value={x.id}>{x.nombre}</option>
+                            ))}
+                        </select>
+                    </Field>
 
-                <Field label="Departamento">
-                    <select
-                        className="w-full rounded-md border px-3 py-2 text-sm"
-                        value={form.departamentoId}
-                        onChange={(e) => changeDepartamento(e.target.value)}
-                        disabled={!form.direccionId || loadingOrg}
-                    >
-                        <option value="">Seleccione...</option>
-                        {departamentos.map((x) => (
-                            <option key={x.id} value={x.id}>{x.nombre}</option>
-                        ))}
-                    </select>
-                </Field>
 
-                <Field label="Oficina">
-                    <select
-                        className="w-full rounded-md border px-3 py-2 text-sm"
-                        value={form.oficinaId}
-                        onChange={(e) => changeOficina(e.target.value)}
-                        disabled={!form.departamentoId || loadingOrg}
-                    >
-                        <option value="">Seleccione...</option>
-                        {oficinas.map((x) => (
-                            <option key={x.id} value={x.id}>{x.nombre}</option>
-                        ))}
-                    </select>
-                </Field>
+                    <Field label="Departamento">
+                        <select
+                            className="w-full rounded-md border px-3 py-2 text-sm"
+                            value={form.departamentoId}
+                            onChange={(e) => changeDepartamento(e.target.value)}
+                            disabled={!form.direccionId || loadingOrg}
+                        >
+                            <option value="">Seleccione...</option>
+                            {departamentos.map((x) => (
+                                <option key={x.id} value={x.id}>{x.nombre}</option>
+                            ))}
+                        </select>
+                    </Field>
 
-                <Field label="Sección / Programa">
-                    <select
-                        className="w-full rounded-md border px-3 py-2 text-sm"
-                        value={form.seccionProgramaId}
-                        onChange={(e) => set("seccionProgramaId", e.target.value)}
-                        disabled={!form.oficinaId || loadingOrg}
-                    >
-                        <option value="">Seleccione...</option>
-                        {secciones.map((x) => (
-                            <option key={x.id} value={x.id}>{x.nombre}</option>
-                        ))}
-                    </select>
-                </Field>
+                    <Field label="Oficina">
+                        <select
+                            className="w-full rounded-md border px-3 py-2 text-sm"
+                            value={form.oficinaId}
+                            onChange={(e) => changeOficina(e.target.value)}
+                            disabled={!form.departamentoId || loadingOrg}
+                        >
+                            <option value="">Seleccione...</option>
+                            {oficinas.map((x) => (
+                                <option key={x.id} value={x.id}>{x.nombre}</option>
+                            ))}
+                        </select>
+                    </Field>
+
+                    <Field label="Sección / Programa">
+                        <select
+                            className="w-full rounded-md border px-3 py-2 text-sm"
+                            value={form.seccionProgramaId}
+                            onChange={(e) => set("seccionProgramaId", e.target.value)}
+                            disabled={!form.oficinaId || loadingOrg}
+                        >
+                            <option value="">Seleccione...</option>
+                            {secciones.map((x) => (
+                                <option key={x.id} value={x.id}>{x.nombre}</option>
+                            ))}
+                        </select>
+                    </Field>
+                </div>
+
+                <div className="w-full">
+                    <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+                        <Field label="Nombre responsable">
+                            <input
+                                className="w-full rounded-md border px-3 py-2 text-sm"
+                                value={form.responsableNombre}
+                                onChange={(e) => set("responsableNombre", e.target.value)}
+                            />
+                        </Field>
+
+                        <Field label="Cargo">
+                            <select
+                                className="w-full rounded-md border px-3 py-2 text-sm"
+                                value={form.cargoId}
+                                onChange={(e) => set("cargoId", e.target.value)}
+                                disabled={loading || cargos.length === 0}
+                            >
+                                {cargos.map((x) => (
+                                    <option key={x.id} value={x.id}>{x.nombre}</option>
+                                ))}
+                            </select>
+                        </Field>
+
+                        <Field label="Fecha asignación">
+                            <input
+                                type="date"
+                                className="w-full rounded-md border px-3 py-2 text-sm"
+                                value={form.fechaAsignacion}
+                                onChange={(e) => set("fechaAsignacion", e.target.value)}
+                            />
+                        </Field>
+
+                        <Field label="Tipo de asignación">
+                            <select
+                                className="w-full rounded-md border px-3 py-2 text-sm"
+                                value={form.tipoAsignacionId}
+                                onChange={(e) => set("tipoAsignacionId", e.target.value)}
+                                disabled={loading || tiposAsignacion.length === 0}
+                            >
+                                {tiposAsignacion.map((x) => (
+                                    <option key={x.id} value={x.id}>{x.nombre}</option>
+                                ))}
+                            </select>
+                        </Field>
+
+
+
+                    </div>
+
+                    <div className="mt-4">
+                        <Field label="Observación (opcional)">
+                            <textarea
+                                className="w-full rounded-md border px-3 py-2 text-sm"
+                                value={form.observacionAsignacion}
+                                onChange={(e) => set("observacionAsignacion", e.target.value)}
+                                rows={3}
+                            />
+                        </Field>
+                    </div>
+                </div>
             </div>
-
-            <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-                <Field label="Nombre responsable">
-                    <input
-                        className="w-full rounded-md border px-3 py-2 text-sm"
-                        value={form.responsableNombre}
-                        onChange={(e) => set("responsableNombre", e.target.value)}
-                    />
-                </Field>
-
-                <Field label="Cargo">
-                    <select
-                        className="w-full rounded-md border px-3 py-2 text-sm"
-                        value={form.cargoId}
-                        onChange={(e) => set("cargoId", e.target.value)}
-                        disabled={loading || cargos.length === 0}
-                    >
-                        {cargos.map((x) => (
-                            <option key={x.id} value={x.id}>{x.nombre}</option>
-                        ))}
-                    </select>
-                </Field>
-
-                <Field label="Fecha asignación">
-                    <input
-                        type="date"
-                        className="w-full rounded-md border px-3 py-2 text-sm"
-                        value={form.fechaAsignacion}
-                        onChange={(e) => set("fechaAsignacion", e.target.value)}
-                    />
-                </Field>
-
-                <Field label="Tipo de asignación">
-                    <select
-                        className="w-full rounded-md border px-3 py-2 text-sm"
-                        value={form.tipoAsignacionId}
-                        onChange={(e) => set("tipoAsignacionId", e.target.value)}
-                        disabled={loading || tiposAsignacion.length === 0}
-                    >
-                        {tiposAsignacion.map((x) => (
-                            <option key={x.id} value={x.id}>{x.nombre}</option>
-                        ))}
-                    </select>
-                </Field>
-            </div>
-
-            <Field label="Observación (opcional)">
-                <textarea
-                    className="w-full rounded-md border px-3 py-2 text-sm"
-                    value={form.observacionAsignacion}
-                    onChange={(e) => set("observacionAsignacion", e.target.value)}
-                    rows={3}
-                />
-            </Field>
         </div>
     );
 }

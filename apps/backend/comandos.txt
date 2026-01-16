@@ -32,6 +32,9 @@ pnpm add class-validator class-transformer
 
 
 
+***/apps/frontend:
+pnpm build
+
 
 3.- Generar cliente y validar:
 

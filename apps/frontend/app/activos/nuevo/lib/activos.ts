@@ -15,6 +15,7 @@ export type ActivoRow = {
     seccion: string | null;
     ip: string | null;
     fechaRegistro: string;
+    creadoPor?: string | null;
 };
 
 const API = process.env.NEXT_PUBLIC_API_URL;
@@ -26,6 +27,7 @@ async function getJSON<T>(path: string): Promise<T> {
     return res.json();
 }
 
-export function fetchActivos() {
-    return getJSON<ActivoRow[]>("/activos");
+export function fetchActivos(search?: URLSearchParams) {
+    const q = search ? `?${search.toString()}` : "";
+    return getJSON<ActivoRow[]>(`/activos${q}`);
 }

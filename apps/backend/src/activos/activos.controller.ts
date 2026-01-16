@@ -1,18 +1,21 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post } from "@nestjs/common";
+import { Body, Controller, Delete, Get, Param, Patch, Post, Query, Req, UseGuards } from "@nestjs/common";
 import { ActivosService } from "./activos.service";
+import { JwtAuthGuard } from "../auth/jwt.guard";
 
 @Controller("activos")
 export class ActivosController {
     constructor(private readonly service: ActivosService) { }
 
+    @UseGuards(JwtAuthGuard)
     @Post()
-    create(@Body() body: any) {
-        return this.service.create(body);
+    create(@Body() body: any, @Req() req: any) {
+        const userId = req.user?.sub;
+        return this.service.create(body, Number(userId));
     }
 
     @Get()
-    list() {
-        return this.service.list();
+    list(@Query() query: any) {
+        return this.service.list(query);
     }
 
     @Get(":id")

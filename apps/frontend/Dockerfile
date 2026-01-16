@@ -40,7 +40,7 @@ COPY --from=build --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=build --chown=nextjs:nodejs /app/.next/static ./.next/static
 
 USER nextjs
-# El puerto interno de Next.js siempre es 3000 por defecto
-EXPOSE 3000
+# El puerto interno de Next.js siempre es 3002 por defecto
+EXPOSE 3002
 
 CMD ["node", "server.js"]

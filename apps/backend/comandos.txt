@@ -76,7 +76,7 @@ pnpm bootstrap:admin
 
 
 
-6.- Docker
+6.- Docker (correr en /SistemaInventarioPractica/apps)
 ***sudo docker compose down && sudo DOCKER_BUILDKIT=1 docker compose build --no-cache && sudo docker compose up --force-recreate -d
 
 sudo: "SuperUser Do". En Ubuntu es obligatorio para tener permisos.
@@ -102,6 +102,14 @@ up --force-recreate -d: Levanta el sistema.
  ***sudo docker compose down && sudo DOCKER_BUILDKIT=1 docker compose build --no-cache --progress=plain && sudo docker compose up --force-recreate -d
 
 --progress=plain: En lugar de mostrarte una barrita de carga bonita que oculta detalles, te muestra todo el texto plano.
+
+
+
+***sudo docker compose up -d --build
+
+para correrlo sin borrar nada
+-d es para que se libere la terminal
+--build es para que se construya la imagen con las actualizaciones
 
 
 

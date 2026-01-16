@@ -17,6 +17,10 @@ RUN npm install -g pnpm
 COPY --from=deps /app/node_modules ./node_modules
 COPY pnpm-lock.yaml ./pnpm-lock.yaml
 COPY . .
+# Aceptamos la URL de la API como argumento de construcción
+ARG NEXT_PUBLIC_API_URL
+ENV NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL
+
 # Se ejecuta el build de Next.js (genera la carpeta .next)
 RUN pnpm run build
 
@@ -40,7 +44,7 @@ COPY --from=build --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=build --chown=nextjs:nodejs /app/.next/static ./.next/static
 
 USER nextjs
-# El puerto interno de Next.js siempre es 3002 por defecto
-EXPOSE 3002
+# El puerto interno de Next.js siempre es 3000 por defecto
+EXPOSE 3000
 
 CMD ["node", "server.js"]

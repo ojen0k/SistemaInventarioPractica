@@ -14,12 +14,13 @@ services:
     build:
       context: ./frontend
       dockerfile: Dockerfile
+      args:
+        NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL}
     container_name: inventario-frontend
     ports:
-      - "8088:3002"
+      - "8088:3000"
     env_file:
       - ./frontend/.env
     depends_on:
       - backend
     restart: unless-stopped
-
